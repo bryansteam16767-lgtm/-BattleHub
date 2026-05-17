@@ -16,11 +16,24 @@ export default function App() {
   const [selectedArticle, setSelectedArticle] = useState<Article | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const [isCreatorMode, setIsCreatorMode] = useState(false);
+  const [showAccessModal, setShowAccessModal] = useState(false);
+  const [accessCode, setAccessCode] = useState("");
+  const [accessError, setAccessError] = useState(false);
 
-  // Filter articles by category
-  const filteredArticles = currentCategory === "Inicio" 
-    ? articles 
-    : articles.filter(a => a.category === currentCategory);
+  const SECRET_CODE = "2026";
+
+  const handleAccessSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (accessCode === SECRET_CODE) {
+      setIsCreatorMode(true);
+      setShowAccessModal(false);
+      setAccessCode("");
+      setAccessError(false);
+    } else {
+      setAccessError(true);
+      setAccessCode("");
+    }
+  };
 
   const handlePublish = (newArticle: Article) => {
     setArticles(prev => [newArticle, ...prev]);
@@ -58,6 +71,10 @@ export default function App() {
     window.scrollTo(0, 0);
   };
 
+  const filteredArticles = currentCategory === "Inicio" 
+    ? articles 
+    : articles.filter(a => a.category === currentCategory);
+
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar 
@@ -87,14 +104,73 @@ export default function App() {
 
       <main className="flex-grow pt-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
         <div className="fixed bottom-8 right-8 z-50">
-          <button 
-            onClick={() => setIsCreatorMode(!isCreatorMode)}
-            className="flex items-center gap-2 bg-gaming-card border border-brand-purple text-brand-purple px-6 py-3 rounded-full font-bold shadow-2xl hover:bg-brand-purple hover:text-white transition-all group"
-          >
-            <Layout size={20} className="group-hover:rotate-12 transition-transform" />
-            {isCreatorMode ? "CERRAR DASHBOARD" : "PANEL CREADOR"}
-          </button>
+          {!isCreatorMode && (
+            <button 
+              onClick={() => setShowAccessModal(true)}
+              className="flex items-center gap-2 bg-gaming-card border border-brand-purple text-brand-purple px-6 py-3 rounded-full font-bold shadow-2xl hover:bg-brand-purple hover:text-white transition-all group"
+            >
+              <Layout size={20} className="group-hover:rotate-12 transition-transform" />
+              PANEL CREADOR
+            </button>
+          )}
         </div>
+
+        <AnimatePresence>
+          {showAccessModal && (
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-[100] flex items-center justify-center bg-gaming-bg/90 backdrop-blur-md px-4"
+            >
+              <motion.div 
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                className="bg-gaming-card border border-brand-purple p-8 rounded-3xl w-full max-w-md shadow-[0_0_50px_rgba(124,58,237,0.2)]"
+              >
+                <div className="text-center mb-8">
+                  <div className="w-16 h-16 bg-brand-purple/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Layout className="text-brand-purple" size={32} />
+                  </div>
+                  <h3 className="text-2xl font-display font-black tracking-tighter">ÁREA RESTRINGIDA</h3>
+                  <p className="text-gray-500 text-sm">Introduce el código de acceso del equipo.</p>
+                </div>
+
+                <form onSubmit={handleAccessSubmit} className="space-y-4">
+                  <div>
+                    <input 
+                      type="password"
+                      value={accessCode}
+                      onChange={(e) => {
+                        setAccessCode(e.target.value);
+                        setAccessError(false);
+                      }}
+                      autoFocus
+                      placeholder="CÓDIGO SECRETO"
+                      className={`w-full bg-white/5 border ${accessError ? 'border-red-500' : 'border-white/10'} rounded-xl px-4 py-4 text-center text-xl font-black tracking-[0.5em] focus:outline-none focus:border-brand-purple transition-all`}
+                    />
+                    {accessError && <p className="text-red-500 text-[10px] font-bold text-center mt-2 uppercase tracking-widest">Código Incorrecto</p>}
+                  </div>
+                  <div className="flex gap-2 pt-2">
+                    <button 
+                      type="button"
+                      onClick={() => setShowAccessModal(false)}
+                      className="flex-1 px-4 py-3 bg-white/5 rounded-xl font-bold text-sm hover:bg-white/10 transition-colors"
+                    >
+                      CANCELAR
+                    </button>
+                    <button 
+                      type="submit"
+                      className="flex-1 px-4 py-3 bg-brand-purple rounded-xl font-bold text-sm shadow-lg shadow-brand-purple/20 hover:scale-[1.02] active:scale-95 transition-all"
+                    >
+                      ACCEDER
+                    </button>
+                  </div>
+                </form>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         <AnimatePresence mode="wait">
           {isCreatorMode ? (
