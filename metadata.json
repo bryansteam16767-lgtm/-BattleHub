@@ -1,0 +1,6 @@
+{
+  "name": "GamersHub",
+  "description": "Tu portal definitivo de noticias de videojuegos, trucos de Fortnite y guías PRO. Optimizado para AdSense con contenido real y actualizado.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
