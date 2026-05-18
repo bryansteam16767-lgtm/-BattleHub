@@ -6,10 +6,13 @@ import ArticleView from "./components/ArticleView";
 import CreatorDashboard from "./components/CreatorDashboard";
 import MapCodeCard from "./components/MapCodeCard";
 import ItemShop from "./components/ItemShop";
+import CosmeticDatabase from "./components/CosmeticDatabase";
+import StatsView from "./components/StatsView";
+import FreeCosmetics from "./components/FreeCosmetics";
 import AdBanner from "./components/AdBanner";
 import { MOCK_ARTICLES, MOCK_MAP_CODES } from "./constants";
 import { Article, Category } from "./types";
-import { Sparkles, Loader2, Layout, Gamepad } from "lucide-react";
+import { Sparkles, Loader2, Layout, Gamepad, Users } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
 export default function App() {
@@ -237,18 +240,76 @@ export default function App() {
               </div>
 
               {currentCategory === "Mapas" ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {MOCK_MAP_CODES.map((map) => (
-                    <div key={map.id}>
-                      <MapCodeCard mapCode={map} />
-                    </div>
-                  ))}
-                  <div className="md:col-span-2 lg:col-span-3">
-                    <AdBanner slot="Map Codes Ad" />
+                <div className="space-y-12">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                     <div className="bg-gaming-card border border-white/5 p-8 rounded-3xl relative overflow-hidden group">
+                        <h4 className="text-xs font-black uppercase tracking-widest text-brand-purple mb-2">Rotación Actual</h4>
+                        <p className="text-2xl font-display font-black uppercase">Capítulo 5: Temporada 3</p>
+                        <p className="text-gray-500 text-sm mt-2 font-bold uppercase tracking-widest">MAPA: WASTELAND</p>
+                        <div className="mt-4 flex gap-2">
+                           <span className="px-2 py-1 bg-white/5 rounded text-[10px] font-bold">SOLO</span>
+                           <span className="px-2 py-1 bg-white/5 rounded text-[10px] font-bold">DUO</span>
+                           <span className="px-2 py-1 bg-white/5 rounded text-[10px] font-bold">SQUAD</span>
+                        </div>
+                     </div>
+                     <div className="bg-gaming-card border border-white/5 p-8 rounded-3xl flex flex-col items-center justify-center border-dashed opacity-50">
+                        <p className="text-[10px] font-black uppercase tracking-widest text-gray-500 mb-4">Anuncio AdSense</p>
+                        <div className="w-full h-20 bg-white/5 rounded-xl" />
+                     </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {MOCK_MAP_CODES.map((map) => (
+                      <div key={map.id}>
+                        <MapCodeCard mapCode={map} />
+                      </div>
+                    ))}
                   </div>
                 </div>
               ) : currentCategory === "Tienda" ? (
                 <ItemShop />
+              ) : currentCategory === "Cosméticos" ? (
+                  <CosmeticDatabase type="all" />
+              ) : currentCategory === "Filtraciones" ? (
+                  <CosmeticDatabase type="new" />
+              ) : currentCategory === "Estadísticas" ? (
+                  <StatsView />
+              ) : currentCategory === "Concurrencia" ? (
+                  <div className="space-y-12">
+                    <div className="flex items-center gap-4">
+                      <div className="w-12 h-12 bg-red-600 rounded-2xl flex items-center justify-center animate-pulse shadow-[0_0_20px_rgba(220,38,38,0.3)]">
+                        <Users className="text-white w-6 h-6" />
+                      </div>
+                      <div>
+                        <h2 className="text-3xl font-display font-black uppercase tracking-tight">CONCURRENCIA <span className="text-brand-purple">LIVE</span></h2>
+                        <p className="text-gray-500 text-xs">Usuarios activos en tiempo real en los servidores de Epic Games.</p>
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                       <div className="bg-gaming-card p-10 rounded-3xl border border-white/5 text-center">
+                          <p className="text-gray-500 font-bold text-[10px] uppercase tracking-widest mb-2">Battle Royale</p>
+                          <p className="text-6xl font-display font-black text-brand-purple">450,210</p>
+                       </div>
+                       <div className="bg-gaming-card p-10 rounded-3xl border border-white/5 text-center">
+                          <p className="text-gray-500 font-bold text-[10px] uppercase tracking-widest mb-2">Creative Mode</p>
+                          <p className="text-6xl font-display font-black text-brand-cyan">781,440</p>
+                       </div>
+                       <div className="bg-gaming-card p-10 rounded-3xl border border-white/5 text-center">
+                          <p className="text-gray-500 font-bold text-[10px] uppercase tracking-widest mb-2">LEGO Fortnite</p>
+                          <p className="text-6xl font-display font-black text-yellow-500">123,098</p>
+                       </div>
+                    </div>
+                  </div>
+              ) : currentCategory === "Gratis" ? (
+                  <FreeCosmetics />
+              ) : currentCategory === "Noticias" ? (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                     {filteredArticles.map(article => (
+                       <div key={article.id}>
+                          <NewsCard article={article} onClick={handleArticleClick} />
+                       </div>
+                     ))}
+                  </div>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-4 md:grid-rows-6 gap-4 auto-rows-[200px]">
                   {filteredArticles.map((article, idx) => {

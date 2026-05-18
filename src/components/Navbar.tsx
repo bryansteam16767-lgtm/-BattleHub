@@ -27,16 +27,16 @@ export default function Navbar({ currentCategory, setCategory }: NavbarProps) {
           </div>
 
           {/* Desktop Menu */}
-          <div className="hidden md:flex items-center gap-8">
-            <div className="flex items-center gap-1 bg-white/5 p-1 rounded-2xl border border-white/5">
+          <div className="hidden md:flex items-center gap-6 overflow-x-auto no-scrollbar">
+            <div className="flex items-center gap-1 bg-white/5 p-1 rounded-xl border border-white/5 whitespace-nowrap">
               {CATEGORIES.map((cat) => (
                 <button
                   key={cat}
                   onClick={() => setCategory(cat)}
-                  className={`px-5 py-2 rounded-xl text-xs font-bold uppercase tracking-widest transition-all ${
+                  className={`px-3 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-[0.1em] transition-all ${
                     currentCategory === cat 
-                      ? "text-white bg-brand-purple shadow-lg" 
-                      : "text-gray-400 hover:text-white"
+                    ? "bg-brand-purple text-white shadow-lg shadow-brand-purple/20" 
+                    : "text-gray-500 hover:text-white"
                   }`}
                 >
                   {cat}
@@ -44,9 +44,10 @@ export default function Navbar({ currentCategory, setCategory }: NavbarProps) {
               ))}
             </div>
             
-            <button className="text-[10px] font-black uppercase tracking-widest border-l border-white/10 pl-8 hover:text-brand-purple transition-all italic underline decoration-brand-purple decoration-2 underline-offset-4">
-              EQUIPO
-            </button>
+            <div className="flex items-center gap-2 border-l border-white/10 pl-6 shrink-0">
+               <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse shadow-[0_0_8px_#22c55e]" />
+               <span className="text-[9px] font-black text-white tracking-[0.1em] uppercase">1.2M LIVE</span>
+            </div>
           </div>
 
           <div className="md:hidden">

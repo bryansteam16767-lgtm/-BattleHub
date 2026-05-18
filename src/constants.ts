@@ -1,6 +1,16 @@
 import { Article, Category, MapCode } from "./types";
 
-export const CATEGORIES: Category[] = ["Inicio", "Noticias", "Mapas", "Tienda", "Skins", "Eventos", "Fortnite", "IA", "Guías y Tutoriales"];
+export const CATEGORIES: Category[] = [
+  "Inicio", 
+  "Tienda", 
+  "Mapas", 
+  "Cosméticos", 
+  "Filtraciones", 
+  "Estadísticas", 
+  "Concurrencia",
+  "Gratis",
+  "Noticias"
+];
 
 export const MOCK_MAP_CODES: MapCode[] = [
   {

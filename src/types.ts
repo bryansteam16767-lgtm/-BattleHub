@@ -30,4 +30,28 @@ export interface MapCode {
   creator: string;
 }
 
-export type Category = "Inicio" | "Noticias" | "Mapas" | "Tienda" | "Skins" | "Eventos" | "Fortnite" | "Roblox" | "Minecraft" | "IA" | "Apps" | "Guías y Tutoriales";
+export type Category = 
+  | "Inicio" 
+  | "Tienda" 
+  | "Mapas" 
+  | "Cosméticos" 
+  | "Filtraciones" 
+  | "Estadísticas" 
+  | "Concurrencia" 
+  | "Showdown"
+  | "Gratis"
+  | "Noticias";
+
+export interface MapEvolution {
+  season: string;
+  image: string;
+  description: string;
+}
+
+export interface PlayerStats {
+  name: string;
+  rank: string;
+  wins: number;
+  kd: number;
+  winRate: number;
+}

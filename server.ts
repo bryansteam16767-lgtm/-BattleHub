@@ -24,6 +24,39 @@ async function startServer() {
     }
   });
 
+  // API Route: Cosmetics List
+  app.get("/api/fortnite/cosmetics", async (req, res) => {
+    try {
+      const response = await fetch("https://fortnite-api.com/v2/cosmetics/br");
+      const data = await response.json();
+      res.json(data);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch cosmetics" });
+    }
+  });
+
+  // API Route: Unreleased/Leaks
+  app.get("/api/fortnite/cosmetics/new", async (req, res) => {
+    try {
+      const response = await fetch("https://fortnite-api.com/v2/cosmetics/br/new");
+      const data = await response.json();
+      res.json(data);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch new items" });
+    }
+  });
+
+  // API Route: News List
+  app.get("/api/fortnite/news", async (req, res) => {
+    try {
+      const response = await fetch("https://fortnite-api.com/v2/news/br");
+      const data = await response.json();
+      res.json(data);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch news" });
+    }
+  });
+
   // Gemini Setup
   const ai = new GoogleGenAI({ 
     apiKey: process.env.GEMINI_API_KEY,

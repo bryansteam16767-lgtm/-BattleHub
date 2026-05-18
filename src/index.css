@@ -48,3 +48,13 @@
 .gradient-text {
   @apply bg-clip-text text-transparent bg-linear-to-r from-brand-purple to-brand-cyan;
 }
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
