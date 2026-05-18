@@ -12,10 +12,58 @@ async function startServer() {
 
   app.use(express.json());
 
+  // API Route: Fortnite Item Shop Proxy
+  app.get("/api/fortnite/shop", async (req, res) => {
+    try {
+      const response = await fetch("https://fortnite-api.com/v2/shop/br/combined");
+      const data = await response.json();
+      res.json(data);
+    } catch (error) {
+      console.error("Fortnite API Error:", error);
+      res.status(500).json({ error: "Failed to fetch shop" });
+    }
+  });
+
   // Gemini Setup
   const ai = new GoogleGenAI({ 
     apiKey: process.env.GEMINI_API_KEY,
     httpOptions: { headers: { 'User-Agent': 'aistudio-build' } }
+  });
+
+  // API Route: Generate Gaming News
+  app.post("/api/news/generate", async (req, res) => {
+    try {
+      const { category } = req.body;
+      const response = await ai.models.generateContent({
+        model: "gemini-3-flash-preview",
+        contents: `Eres un redactor experto en videojuegos. Genera un artículo de noticias real y SEO-friendly sobre la categoría "${category || 'deportes electrónicos'}". 
+        El formato DEBE ser estrictamente JSON válido sin bloques de código markdown, con estos campos: 
+        {
+          "title": "título llamativo",
+          "summary": "resumen corto",
+          "content": "contenido extenso de más de 500 palabras",
+          "tags": ["tag1", "tag2"],
+          "date": "2024-05-17",
+          "author": "Nombre Autor"
+        }
+        Usa un tono profesional pero emocionante para Gamers.`,
+        config: { responseMimeType: "application/json" }
+      });
+      
+      const text = response.text || "{}";
+      const jsonMatch = text.match(/\{[\s\S]*\}/);
+      const cleanText = jsonMatch ? jsonMatch[0] : text;
+      
+      try {
+        res.json(JSON.parse(cleanText));
+      } catch (parseError) {
+        console.error("JSON Parse Error:", parseError, "Raw Text:", text);
+        res.status(500).json({ error: "Invalid JSON from AI", raw: text });
+      }
+    } catch (error) {
+      console.error("Gemini Error:", error);
+      res.status(500).json({ error: "Failed to generate news" });
+    }
   });
 
   // API Route: AI Assistance for Creators

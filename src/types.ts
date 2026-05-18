@@ -10,4 +10,24 @@ export interface Article {
   tags: string[];
 }
 
-export type Category = "Inicio" | "Noticias" | "Mapas" | "Skins" | "Eventos" | "Fortnite" | "Roblox" | "Minecraft" | "IA" | "Apps" | "Guías y Tutoriales";
+export interface ShopItem {
+  id: string;
+  name: string;
+  description: string;
+  type: string;
+  rarity: string;
+  price: number;
+  image: string;
+  category: string;
+}
+
+export interface MapCode {
+  id: string;
+  title: string;
+  code: string;
+  image: string;
+  category: "XP" | "1v1" | "Box Fight" | "Hide and Seek" | "Practice";
+  creator: string;
+}
+
+export type Category = "Inicio" | "Noticias" | "Mapas" | "Tienda" | "Skins" | "Eventos" | "Fortnite" | "Roblox" | "Minecraft" | "IA" | "Apps" | "Guías y Tutoriales";

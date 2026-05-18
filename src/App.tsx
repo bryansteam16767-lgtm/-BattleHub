@@ -1,13 +1,15 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import NewsCard from "./components/NewsCard";
 import ArticleView from "./components/ArticleView";
 import CreatorDashboard from "./components/CreatorDashboard";
+import MapCodeCard from "./components/MapCodeCard";
+import ItemShop from "./components/ItemShop";
 import AdBanner from "./components/AdBanner";
-import { MOCK_ARTICLES } from "./constants";
+import { MOCK_ARTICLES, MOCK_MAP_CODES } from "./constants";
 import { Article, Category } from "./types";
-import { Sparkles, Loader2, Layout } from "lucide-react";
+import { Sparkles, Loader2, Layout, Gamepad } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
 export default function App() {
@@ -50,6 +52,11 @@ export default function App() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ category: currentCategory })
       });
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
       const newArticle = await response.json();
       
       if (newArticle.title) {
@@ -214,51 +221,72 @@ export default function App() {
 
               <div className="flex flex-col md:flex-row items-center justify-between mb-8 gap-4">
                 <h2 className="text-3xl font-display font-black uppercase tracking-tight">
-                  <span className="text-brand-purple">|</span> {currentCategory} <span className="text-gray-600 font-normal">Noticias Recientes</span>
+                  <span className="text-brand-purple">|</span> {currentCategory} <span className="text-gray-600 font-normal">
+                    {currentCategory === "Mapas" ? "Códigos Filtrados" : "Noticias Recientes"}
+                  </span>
                 </h2>
                 
-                <div className="flex bg-gaming-card p-1 rounded-lg border border-white/5">
-                  <button className="px-4 py-1 text-xs font-bold text-brand-cyan bg-white/5 rounded-md">ÚLTIMAS</button>
-                  <button className="px-4 py-1 text-xs font-bold text-gray-500 hover:text-white">POPULARES</button>
+                <div className="flex bg-gaming-card p-1 rounded-lg border border-white/5 text-center">
+                  <button className="px-4 py-1 text-xs font-bold text-brand-cyan bg-white/5 rounded-md">
+                    {currentCategory === "Mapas" ? "MÁS USADOS" : "ÚLTIMAS"}
+                  </button>
+                  <button className="px-4 py-1 text-xs font-bold text-gray-500 hover:text-white uppercase">
+                    {currentCategory === "Mapas" ? "XP GLITCH" : "POPULARES"}
+                  </button>
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-4 md:grid-rows-6 gap-4 auto-rows-[200px]">
-                {filteredArticles.map((article, idx) => {
-                  let span = "md:col-span-1 md:row-span-1";
-                  if (idx === 0) span = "md:col-span-2 md:row-span-2";
-                  if (idx === 1) span = "md:col-span-1 md:row-span-2";
-                  if (idx === 4) span = "md:col-span-2 md:row-span-1";
-                  
-                  return (
-                    <div key={article.id} className={span}>
-                      <NewsCard 
-                        article={article} 
-                        onClick={handleArticleClick} 
-                        span="w-full h-full"
-                      />
+              {currentCategory === "Mapas" ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {MOCK_MAP_CODES.map((map) => (
+                    <div key={map.id}>
+                      <MapCodeCard mapCode={map} />
                     </div>
-                  );
-                })}
-                
-                {/* Ad Slot in Grid */}
-                <div className="md:col-span-1 md:row-span-2 bg-gaming-card border border-dashed border-white/10 rounded-[20px] flex flex-col items-center justify-center text-center p-6 grayscale hover:grayscale-0 transition-all">
-                  <span className="text-[10px] uppercase tracking-widest text-gray-500 mb-4 font-bold">Publicidad</span>
-                  <div className="w-20 h-20 bg-white/5 rounded-xl border border-white/5 flex items-center justify-center text-gray-600 mb-4 font-black">ADS</div>
-                  <p className="text-[11px] text-gray-600">Espacio optimizado para AdSense</p>
+                  ))}
+                  <div className="md:col-span-2 lg:col-span-3">
+                    <AdBanner slot="Map Codes Ad" />
+                  </div>
                 </div>
+              ) : currentCategory === "Tienda" ? (
+                <ItemShop />
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-4 md:grid-rows-6 gap-4 auto-rows-[200px]">
+                  {filteredArticles.map((article, idx) => {
+                    let span = "md:col-span-1 md:row-span-1";
+                    if (idx === 0) span = "md:col-span-2 md:row-span-2";
+                    if (idx === 1) span = "md:col-span-1 md:row-span-2";
+                    if (idx === 4) span = "md:col-span-2 md:row-span-1";
+                    
+                    return (
+                      <div key={article.id} className={span}>
+                        <NewsCard 
+                          article={article} 
+                          onClick={handleArticleClick} 
+                          span="w-full h-full"
+                        />
+                      </div>
+                    );
+                  })}
+                  
+                  {/* Ad Slot in Grid */}
+                  <div className="md:col-span-1 md:row-span-2 bg-gaming-card border border-dashed border-white/10 rounded-[20px] flex flex-col items-center justify-center text-center p-6 grayscale hover:grayscale-0 transition-all">
+                    <span className="text-[10px] uppercase tracking-widest text-gray-500 mb-4 font-bold">Publicidad</span>
+                    <div className="w-20 h-20 bg-white/5 rounded-xl border border-white/5 flex items-center justify-center text-gray-600 mb-4 font-black">ADS</div>
+                    <p className="text-[11px] text-gray-600">Espacio optimizado para AdSense</p>
+                  </div>
 
-                <div className="md:col-span-2 md:row-span-1 bg-brand-purple rounded-[20px] p-8 flex items-center justify-between group overflow-hidden relative">
-                   <div className="relative z-10">
-                      <h3 className="text-2xl font-display font-black mb-1">CÓDIGOS ROBLOX</h3>
-                      <p className="text-white/70 text-sm">Actualizados hace 2 horas</p>
-                   </div>
-                   <button className="relative z-10 bg-white text-brand-purple px-6 py-2 rounded-full font-bold text-sm hover:scale-105 transition-transform">VER TODOS</button>
-                   <div className="absolute -right-4 -bottom-4 opacity-10 group-hover:scale-110 transition-transform">
-                      <Sparkles size={120} />
-                   </div>
+                  <div className="md:col-span-2 md:row-span-1 bg-brand-purple rounded-[20px] p-8 flex items-center justify-between group overflow-hidden relative">
+                     <div className="relative z-10">
+                        <h3 className="text-2xl font-display font-black mb-1">CÓDIGOS ROBLOX</h3>
+                        <p className="text-white/70 text-sm">Actualizados hace 2 horas</p>
+                     </div>
+                     <button className="relative z-10 bg-white text-brand-purple px-6 py-2 rounded-full font-bold text-sm hover:scale-105 transition-transform">VER TODOS</button>
+                     <div className="absolute -right-4 -bottom-4 opacity-10 group-hover:scale-110 transition-transform">
+                        <Sparkles size={120} />
+                     </div>
+                  </div>
                 </div>
-              </div>
+              )}
               
               {filteredArticles.length === 0 && (
                 <div className="text-center py-24 text-gray-500">

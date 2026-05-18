@@ -113,13 +113,42 @@ export default function CreatorDashboard({ onPublish, onClose }: CreatorDashboar
               </div>
               <div>
                 <label className="text-xs font-bold text-gray-500 uppercase mb-2 block flex items-center gap-2">
-                  <ImageIcon size={14} /> URL Imagen
+                  <ImageIcon size={14} /> Imagen del Artículo
                 </label>
-                <input
-                  value={formData.image}
-                  onChange={e => setFormData({ ...formData, image: e.target.value })}
-                  className="bg-white/5 border border-white/10 rounded-xl px-4 py-3 w-full focus:outline-none focus:border-brand-purple"
-                />
+                <div className="flex gap-2">
+                  <input
+                    value={formData.image}
+                    onChange={e => setFormData({ ...formData, image: e.target.value })}
+                    placeholder="URL de imagen..."
+                    className="bg-white/5 border border-white/10 rounded-xl px-4 py-3 w-full focus:outline-none focus:border-brand-purple transition-all text-sm"
+                  />
+                  <label className="bg-white/5 hover:bg-brand-purple/20 p-3 rounded-xl border border-white/10 transition-all text-brand-purple cursor-pointer flex items-center justify-center shrink-0">
+                    <Save size={20} />
+                    <input 
+                      type="file" 
+                      accept="image/*" 
+                      className="hidden" 
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          const reader = new FileReader();
+                          reader.onloadend = () => {
+                            setFormData({ ...formData, image: reader.result as string });
+                          };
+                          reader.readAsDataURL(file);
+                        }
+                      }}
+                    />
+                  </label>
+                </div>
+                {formData.image && (
+                  <div className="mt-4 relative aspect-video rounded-xl overflow-hidden border border-white/10 group">
+                    <img src={formData.image} className="w-full h-full object-cover" alt="Preview" />
+                    <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                      <span className="text-[10px] font-bold uppercase tracking-widest bg-brand-purple px-3 py-1 rounded-full">Vista Previa</span>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
 

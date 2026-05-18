@@ -1,6 +1,41 @@
-import { Article, Category } from "./types";
+import { Article, Category, MapCode } from "./types";
 
-export const CATEGORIES: Category[] = ["Inicio", "Noticias", "Mapas", "Skins", "Eventos", "Fortnite", "IA", "Guías y Tutoriales"];
+export const CATEGORIES: Category[] = ["Inicio", "Noticias", "Mapas", "Tienda", "Skins", "Eventos", "Fortnite", "IA", "Guías y Tutoriales"];
+
+export const MOCK_MAP_CODES: MapCode[] = [
+  {
+    id: "m1",
+    title: "The Pit - Free For All",
+    code: "4590-4493-7113",
+    image: "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&q=80&w=400",
+    category: "Practice",
+    creator: "GamerPro"
+  },
+  {
+    id: "m2",
+    title: "1v1 Build Fight (No Delay)",
+    code: "0000-0000-0000",
+    image: "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&q=80&w=400",
+    category: "1v1",
+    creator: "FastEdits"
+  },
+  {
+    id: "m3",
+    title: "Infinite XP Glitch Map",
+    code: "1234-5678-9012",
+    image: "https://images.unsplash.com/photo-1493711662062-fa541adb3fc8?auto=format&fit=crop&q=80&w=400",
+    category: "XP",
+    creator: "XPFarmer"
+  },
+  {
+    id: "m4",
+    title: "Pro Aim Trainer",
+    code: "9999-8888-7777",
+    image: "https://images.unsplash.com/photo-1589241062272-c0a000072dfa?auto=format&fit=crop&q=80&w=400",
+    category: "Practice",
+    creator: "AimGod"
+  }
+];
 
 export const MOCK_ARTICLES: Article[] = [
   {
